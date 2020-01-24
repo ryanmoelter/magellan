@@ -12,6 +12,8 @@ import android.util.SparseArray;
 import android.view.Menu;
 import android.view.ViewGroup;
 
+import com.wealthfront.magellan.compose.Navigable;
+
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -37,7 +39,7 @@ import static com.wealthfront.magellan.Preconditions.checkState;
  * }
  * </code> </pre>
  */
-public abstract class Screen<V extends ViewGroup & ScreenView> implements BackHandler {
+public abstract class Screen<V extends ViewGroup & ScreenView> implements BackHandler, Navigable {
 
   public static final int DEFAULT_ACTION_BAR_COLOR_RES = 0;
   private static final String VIEW_STATE = "com.wealthfront.navigation.Screen.viewState";
@@ -134,12 +136,14 @@ public abstract class Screen<V extends ViewGroup & ScreenView> implements BackHa
     }
   }
 
-  void transitionStarted() {
+  @Override
+  public void transitionStarted() {
     isTransitioning = true;
     transitionFinishedListeners.clear();
   }
 
-  void transitionFinished() {
+  @Override
+  public void transitionFinished() {
     isTransitioning = false;
     while (transitionFinishedListeners.size() > 0) {
       transitionFinishedListeners.remove().onTransitionFinished();
